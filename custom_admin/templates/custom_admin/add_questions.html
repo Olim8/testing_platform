@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Questions{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Test savollari</h1>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="questions_text" class="form-control" rows="20" placeholder="Savollarni kiritish..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ko'rish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Test savollari</h6>
+            </div>
+            <div class="card-body">
+                {% for question in questions %}
+                <p><strong>{{ forloop.counter }}. {{ question.text }}</strong></p>
+                <ul>
+                    <li>a) {{ question.options.0 }}</li>
+                    <li>b) {{ question.options.1 }}</li>
+                    <li>c) {{ question.options.2 }}</li>
+                    <li>d) {{ question.options.3 }}</li>
+                </ul>
+                {% empty %}
+                <p>No questions to display.</p>
+                {% endfor %}
+                {% if questions %}
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

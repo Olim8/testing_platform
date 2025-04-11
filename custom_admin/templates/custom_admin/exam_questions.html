@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Questions{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Imtihon ma'lumotlari</h1>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Imtihon ma'lumotlari</h6>
+        <div class="btn-group" role="group">
+            <a href="{% url 'exam_detail' exam.id %}" class="btn btn-primary btn-sm">Imtihon ma'lumotlari</a>
+            <a href="{% url 'add_questions' exam.id %}" class="btn btn-success btn-sm">Kiritish</a>
+            <a href="#" class="btn btn-info btn-sm">Eksport</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nomi</th>
+                        <th>Faol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for question in questions %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ question.text }}</td>
+                        <td>
+                            <input type="checkbox" disabled checked>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No questions available for this exam.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

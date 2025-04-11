@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Detail{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Exam Detail</h1>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Exam Details</h6>
+        <div class="btn-group" role="group">
+            <a href="{% url 'exam_questions' exam.id %}" class="btn btn-info btn-sm">Savollar</a>
+            <a href="{% url 'add_group' exam.id %}" class="btn btn-success btn-sm">Guruh qo'shish</a>
+            <a href="{% url 'exam_results' exam.id %}" class="btn btn-warning btn-sm">Natija</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.oquv_reja.id_for_label }}">{{ form.oquv_reja.label }}</label>
+                        {{ form.oquv_reja }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.oquv_yili.id_for_label }}">{{ form.oquv_yili.label }}</label>
+                        {{ form.oquv_yili }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.semester.id_for_label }}">{{ form.semester.label }}</label>
+                        {{ form.semester }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }}</label>
+                        {{ form.subject }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.nazorat_turi.id_for_label }}">{{ form.nazorat_turi.label }}</label>
+                        {{ form.nazorat_turi }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.faol.id_for_label }}">{{ form.faol.label }}</label>
+                        {{ form.faol }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.boshlanish.id_for_label }}">{{ form.boshlanish.label }}</label>
+                        {{ form.boshlanish }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tugash.id_for_label }}">{{ form.tugash.label }}</label>
+                        {{ form.tugash }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.vaqti_daqiqa.id_for_label }}">{{ form.vaqti_daqiqa.label }}</label>
+                        {{ form.vaqti_daqiqa }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.maks_ball.id_for_label }}">{{ form.maks_ball.label }}</label>
+                        {{ form.maks_ball }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.urinishlar.id_for_label }}">{{ form.urinishlar.label }}</label>
+                        {{ form.urinishlar }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.savollar_soni.id_for_label }}">{{ form.savollar_soni.label }}</label>
+                        {{ form.savollar_soni }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tasodifiy.id_for_label }}">{{ form.tasodifiy.label }}</label>
+                        {{ form.tasodifiy }}
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+            <a href="{% url 'create_exam' %}" class="btn btn-secondary">Seansni o'chirish</a>
+        </form>
+
+        <h3 class="mt-5">Imtihon guruhlari</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Guruh</th>
+                        <th>Fakultet</th>
+                        <th>Til</th>
+                        <th>Boshlanish vaqti</th>
+                        <th>Tugash vaqti</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.department.name }}</td>
+                        <td>{{ group.education_lang.name }}</td>
+                        <td>{{ exam.boshlanish }}</td>
+                        <td>{{ exam.tugash }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">No groups assigned to this exam.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Departments{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Departments</h1>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Department List</h6>
+    </div>
+    <div class="card-body">
+        <form method="get" class="form-horizontal mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="id_name" style="margin-right: 100px;">Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="col-md-3">
+                    <label for="id_code" style="margin-right: 100px;">Code</label>
+                    {{ form.code }}
+                </div>
+                <div class="col-md-3">
+                    <label for="id_active" style="margin-right: 300px;">Active</label>
+                    {{ form.active }}
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" style="margin-right: 100px;" class="btn btn-primary mt-4">Filter</button>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in departments %}
+                    <tr>
+                        <td>{{ dept.id }}</td>
+                        <td>{{ dept.name }}</td>
+                        <td>{{ dept.code }}</td>
+                        <td>{{ dept.active }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No departments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if departments.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if departments.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ departments.previous_page_number }}">Back</a>
+                </li>
+                {% if departments.previous_page_number > 3 %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+                {% endif %}
+        
+                {% for num in departments.paginator.page_range|slice:":3" %}
+                <li class="page-item {% if departments.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+        
+                {% if departments.has_next %}
+                {% if departments.paginator.num_pages > 3 and departments.number < departments.paginator.num_pages %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ departments.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
