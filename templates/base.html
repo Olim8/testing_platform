@@ -64,7 +64,7 @@
             </li>
             <!-- Nav Item - Create Exams -->
             <li class="nav-item {% if request.resolver_match.url_name == 'create_exam' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'create_exam' %}">
+                <a class="nav-link" href="{% url 'exams_list' %}">
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Imtihonlar ro'yxati</span>
                 </a>

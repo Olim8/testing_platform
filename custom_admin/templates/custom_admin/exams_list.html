@@ -1,5 +1,130 @@
 {% extends 'base.html' %}
-{% block title %}Imtihonlar ro'yxati{% endblock %}
-{% block content %}
 
+{% block title %}Exams List{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Imtihonlar ro'yxati</h1>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <!-- Imtihon yaratish button on the left -->
+        <a href="{% url 'create_exam' %}" class="btn btn-success">Imtihon yaratish</a>
+
+        <!-- Form with dropdowns and search input on the right -->
+        <form method="get" class="d-flex align-items-center" id="search-form">
+            <!-- O'quv yili dropdown -->
+            <label for="oquv_yili" class="mx-2"></label>
+            <input list="oquv_yili_options" name="oquv_yili" id="oquv_yili" class="form-control d-inline-block mx-2" style="width: 350px;" {% if oquv_yili %}value="{{ oquv_yili }}"{% endif %} placeholder="O'quv yilini tanlang" onchange="document.getElementById('search-form').submit()">
+            <datalist id="oquv_yili_options">
+                <option value="2024 (2024-2025)">
+                <option value="2023 (2023-2024)">
+                <option value="2022 (2022-2023)">
+            </datalist>
+
+            <!-- Guruhni tanlang dropdown -->
+            <label for="guruh" class="mx-2"></label>
+            <input list="guruh_options" name="guruh" id="guruh" class="form-control d-inline-block mx-2" style="width: 350px;" placeholder="Guruhni tanlang" value="{{ request.GET.guruh }}" onchange="document.getElementById('search-form').submit()">
+            <datalist id="guruh_options">
+                <option value="">
+                {% for group in groups %}
+                <option value="{{ group.name }}">
+                {% endfor %}
+            </datalist>
+
+            <!-- Nom bo'yicha qidirish -->
+            <input type="text" name="search_query" class="form-control d-inline-block mx-4" style="width: 350px;" placeholder="Nom bo'yicha qidirish" value="{{ request.GET.search_query }}" oninput="debounceSubmit()">
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="width: 40%">
+                            <a href="?sort_by={% if sort_by == 'name' %}-name{% else %}name{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                Nomi
+                                {% if sort_by == 'name' %}↑{% elif sort_by == '-name' %}↓{% endif %}
+                            </a>
+                        </th>
+                        <th style="width: 5%">
+                            <a href="?sort_by={% if sort_by == 'oquv_yili' %}-oquv_yili{% else %}oquv_yili{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                O'quv yili
+                                {% if sort_by == 'oquv_yili' %}↑{% elif sort_by == '-oquv_yili' %}↓{% endif %}
+                            </a>
+                        </th>
+                        <th style="width: 25%">
+                            Guruhlar
+                        </th>
+                        <th style="width: 5%">
+                            Savollar
+                        </th>
+                        <th style="width: 5%">
+                            <a href="?sort_by={% if sort_by == 'boshlanish' %}-boshlanish{% else %}boshlanish{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                Boshlanish
+                                {% if sort_by == 'boshlanish' %}↑{% elif sort_by == '-boshlanish' %}↓{% endif %}
+                            </a>
+                        </th>
+                        <th style="width: 5%">
+                            <a href="?sort_by={% if sort_by == 'tugash' %}-tugash{% else %}tugash{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                Tugash
+                                {% if sort_by == 'tugash' %}↑{% elif sort_by == '-tugash' %}↓{% endif %}
+                            </a>
+                        </th>
+                        <th style="width: 5%">
+                            <a href="?sort_by={% if sort_by == 'vaqti_daqiqa' %}-vaqti_daqiqa{% else %}vaqti_daqiqa{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                Vaqti (daqiqa)
+                                {% if sort_by == 'vaqti_daqiqa' %}↑{% elif sort_by == '-vaqti_daqiqa' %}↓{% endif %}
+                            </a>
+                        </th>
+                        <th style="width: 5%">
+                            <a href="?sort_by={% if sort_by == 'faol' %}-faol{% else %}faol{% endif %}{% if oquv_yili %}&oquv_yili={{ oquv_yili }}{% endif %}{% if request.GET.guruh %}&guruh={{ request.GET.guruh }}{% endif %}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}">
+                                Faol
+                                {% if sort_by == 'faol' %}↑{% elif sort_by == '-faol' %}↓{% endif %}
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exam in exams %}
+                    <tr>
+                        <td>
+                            {{ exam.name }}<br>
+                            <small>{{ exam.nazorat_turi }} / {{ exam.created_by }}</small>
+                        </td>
+                        <td>{{ exam.oquv_yili }}<br>{{ exam.semester }}</td>
+                        <td>
+                            {% for group in exam.groups.all %}
+                            {{ group.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ exam.savollar_soni }} / {{ exam.savollar_soni }}</td>
+                        <td>{{ exam.boshlanish|date:"d.m.Y H:i" }}</td>
+                        <td>{{ exam.tugash|date:"d.m.Y H:i" }}</td>
+                        <td>{{ exam.vaqti_daqiqa }} daqiqa</td>
+                        <td>
+                            <input type="checkbox" disabled {% if exam.faol %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">No exams available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    let debounceTimeout;
+    function debounceSubmit() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            document.getElementById('search-form').submit();
+        }, 300); // Delay of 300ms
+    }
+</script>
+{% endblock %}
 {% endblock %}

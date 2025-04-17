@@ -3,12 +3,48 @@ from django.contrib.auth import logout
 from backend.models import Department, Group, Student, Exam, Specialty, Question
 from .forms import DepartmentFilterForm, GroupFilterForm, StudentFilterForm, ExamForm
 from django.core.paginator import Paginator
+from django.db.models import Min
 
 def dashboard(request):
     department_count = Department.objects.count()
     group_count = Group.objects.count()
     student_count = Student.objects.count()
     return render(request, 'custom_admin/dashboard.html', {'department_count': department_count, 'group_count':group_count, 'student_count': student_count})
+
+def exams_list(request):
+    # Base queryset for exams
+    exams = Exam.objects.all()
+
+    # Apply filters
+    oquv_yili = request.GET.get('oquv_yili')  # No default value
+    guruh = request.GET.get('guruh')
+    search_query = request.GET.get('search_query')
+    sort_by = request.GET.get('sort_by', '-created_at')  # Default sorting by created_at (descending)
+
+    if oquv_yili:
+        exams = exams.filter(oquv_yili=oquv_yili)
+    if guruh:
+        exams = exams.filter(groups__name=guruh)
+    if search_query:
+        exams = exams.filter(name__icontains=search_query)
+
+    # Apply sorting
+    if sort_by in ['name', 'oquv_yili', 'boshlanish', 'tugash', 'vaqti_daqiqa', 'faol', 'created_at']:
+        exams = exams.order_by(sort_by)
+    elif sort_by in ['-name', '-oquv_yili', '-boshlanish', '-tugash', '-vaqti_daqiqa', '-faol', '-created_at']:
+        exams = exams.order_by(sort_by)
+    else:
+        exams = exams.order_by('-created_at')  # Fallback to default sorting
+
+    # Get all groups for the filter dropdown
+    groups = Group.objects.all()
+
+    return render(request, 'custom_admin/exams_list.html', {
+        'exams': exams,
+        'oquv_yili': oquv_yili,
+        'groups': groups,
+        'sort_by': sort_by,
+    })
 
 def department_list(request):
     form = DepartmentFilterForm(request.GET)
