@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment
+.env
+
+# DB
+db.sqlite3
+
+# VSCode
+.vscode/
+
+# Test and Cache
+.pytest_cache/
+.mypy_cache/
