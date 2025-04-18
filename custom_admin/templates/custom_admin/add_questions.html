@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Add Questions{% endblock %}
+{% block title %}Savollar qo'shish{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Asosiy</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Savollar qo'shish</li>
+    </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
 <h1 class="h3 mb-4 text-gray-800">Test savollari</h1>

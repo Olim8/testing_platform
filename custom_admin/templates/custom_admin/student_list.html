@@ -1,30 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Students{% endblock %}
+{% block title %}Talabalar{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Asosiy</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Talabalar</li>
+    </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-4 text-gray-800">Students</h1>
+<h1 class="h3 mb-4 text-gray-800">Talabalar</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Student List</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Talabalar ro'yxati</h6>
     </div>
     <div class="card-body">
         <form method="get" class="form-horizontal mb-4">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="id_full_name" style="margin-right: 100px;">Full Name</label>
+                    <label for="id_full_name" style="margin-right: 100px;">F.I.SH</label>
                     {{ form.full_name }}
                 </div>
                 <div class="col-md-3">
-                    <label for="id_student_id_number" style="margin-right: 100px;">Student ID</label>
+                    <label for="id_student_id_number" style="margin-right: 100px;">Talaba ID</label>
                     {{ form.student_id_number }}
                 </div>
                 <div class="col-md-3">
-                    <label for="id_department" style="margin-right: 100px;">Department</label>
+                    <label for="id_department" style="margin-right: 100px;">Fakulteti</label>
                     {{ form.department }}
                 </div>
                 <div class="col-md-3">
-                    <label for="id_group" style="margin-right: 100px;">Group</label>
+                    <label for="id_group" style="margin-right: 100px;">Guruhi</label>
                     {{ form.group }}
                 </div>
                 <div class="col-md-3">
@@ -65,7 +74,7 @@
             <ul class="pagination justify-content-center">
                 {% if students.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ students.previous_page_number }}">Back</a>
+                    <a class="page-link" href="?page={{ students.previous_page_number }}">Orqaga</a>
                 </li>
                 {% if students.previous_page_number > 3 %}
                 <li class="page-item disabled">
@@ -87,7 +96,7 @@
                 </li>
                 {% endif %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ students.next_page_number }}">Next</a>
+                    <a class="page-link" href="?page={{ students.next_page_number }}">Oldinga</a>
                 </li>
                 {% endif %}
             </ul>

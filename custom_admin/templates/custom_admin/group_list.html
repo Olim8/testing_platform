@@ -1,26 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Groups{% endblock %}
+{% block title %}Guruhlar{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Asosiy</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Guruhlar</li>
+    </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-4 text-gray-800">Groups</h1>
+<h1 class="h3 mb-4 text-gray-800">Guruhlar</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Group List</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Guruhlar ro'yxati</h6>
     </div>
     <div class="card-body">
         <form method="get" class="form-horizontal mb-4">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="id_name" style="margin-right: 100px;">Name</label>
+                    <label for="id_name" style="margin-right: 100px;">Nomi</label>
                     {{ form.name }}
                 </div>
                 <div class="col-md-3">
-                    <label for="id_department" style="margin-right: 100px;">Department</label>
+                    <label for="id_department" style="margin-right: 100px;">Fakulteti</label>
                     {{ form.department }}
                 </div>
                 <div class="col-md-3">
-                    <label for="id_department"  style="margin-right: 100px;">Specialty</label>
+                    <label for="id_department"  style="margin-right: 100px;">Mutaxassisligi</label>
                     {{ form.specialty }}
                 </div>
                 <div class="col-md-3">
@@ -33,9 +42,9 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Specialty</th>
+                        <th>Nomi</th>
+                        <th>Fakulteti</th>
+                        <th>Mutaxassisligi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +57,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4">No groups found.</td>
+                        <td colspan="4">Guruh topilmadi.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -59,7 +68,7 @@
             <ul class="pagination justify-content-center">
                 {% if groups.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ groups.previous_page_number }}">Back</a>
+                    <a class="page-link" href="?page={{ groups.previous_page_number }}">Orqaga</a>
                 </li>
                 {% if groups.previous_page_number > 3 %}
                 <li class="page-item disabled">
@@ -81,7 +90,7 @@
                 </li>
                 {% endif %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ groups.next_page_number }}">Next</a>
+                    <a class="page-link" href="?page={{ groups.next_page_number }}">Oldinga</a>
                 </li>
                 {% endif %}
             </ul>
